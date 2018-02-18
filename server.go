@@ -20,7 +20,8 @@ var Db *sql.DB
 
 func init() {
 	var err error
-	Db, err = sql.Open("postgres", "user=Junhwan dbname=students password=bjhbeom sslmode=disable")
+	Db, err = sql.Open("postgres", "user=username dbname=students password=yourpassword sslmode=disable")
+	// You should replace your username and yourpassword.
 	if err != nil {
 		panic(err)
 	}
