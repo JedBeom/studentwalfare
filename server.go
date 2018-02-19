@@ -2,20 +2,35 @@ package main
 
 import (
 	"database/sql"
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
+	"github.com/JedBeom/studentwelfare/data"
 	_ "github.com/lib/pq"
 )
 
 //Student contains information of a student.
 type Student struct {
-	ID     int    `json:"id"`
-	Number int    `json:"number"`
-	Name   string `json:"name"`
-	Points int    `json:"points"`
+	ID       int    `json:"id"`
+	Number   int    `json:"number"`
+	Name     string `json:"name"`
+	Points   int    `json:"points"`
+	IsAdmin  bool
+	Email    string
+	Password string
+	Coupons  int
+}
+
+//History contains what happens in the server.
+type History struct {
+	Sequence    int
+	ID          int
+	Location    string
+	description string
+	AdminID     int
+	ScanTime    time.Time
 }
 
 //Db is for a database. See what happens in the main function.
@@ -23,8 +38,8 @@ var Db *sql.DB
 
 func init() {
 	var err error
-	Db, err = sql.Open("postgres", "user=username dbname=students password=yourpassword sslmode=disable")
-	// You should replace your username and yourpassword.
+	Db, err = sql.Open("postgres", "user="+data.Username()+" dbname=students password="+data.Password()+" sslmode=disable")
+	// You should go to data/const.go and replace yourusername and yourpassword.
 	if err != nil {
 		panic(err)
 	}
@@ -63,11 +78,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	output, err2 := json.MarshalIndent(&student, "", "\t\t")
-	if err2 != nil {
-		fmt.Println("Error")
-		return
-	}
-	fmt.Println(output)
+	fmt.Println(student)
 	server.ListenAndServe()
 }
