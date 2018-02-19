@@ -4,18 +4,21 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	_ "github.com/lib/pq"
 	"log"
 	"net/http"
+
+	_ "github.com/lib/pq"
 )
 
+//Student contains information of a student.
 type Student struct {
-	Id     int    `json:"id"`
+	ID     int    `json:"id"`
 	Number int    `json:"number"`
 	Name   string `json:"name"`
 	Points int    `json:"points"`
 }
 
+//Db is for a database. See what happens in the main function.
 var Db *sql.DB
 
 func init() {
@@ -27,25 +30,26 @@ func init() {
 	}
 }
 
-func get_a_student(id int) (student Student, err error) {
+func getAStudent(id int) (student Student, err error) {
 	student = Student{}
-	err = Db.QueryRow("select id, number, name, points from student where id = $1", id).Scan(&student.Id, &student.Number,
+	err = Db.QueryRow("select id, number, name, points from student where id = $1", id).Scan(&student.ID, &student.Number,
 		&student.Name, &student.Points)
 	return
 }
 
-func edit_points(id int, added_int int) (err error) {
+func editPoints(id int, addedInt int) (err error) {
 	student := Student{}
-	student.Id = id
+	student.ID = id
 	err = Db.QueryRow("select points from student where id = $1", id).Scan(&student.Points)
 	log.Println(student.Points)
-	student.Points = added_int + student.Points
+	student.Points = addedInt + student.Points
 	log.Println(student.Points)
-	_, err = Db.Exec("update student set points = $2 where id = $1", student.Id, student.Points)
+	_, err = Db.Exec("update student set points = $2 where id = $1", student.ID, student.Points)
 	return
 }
 
-func get_handler(w http.ResponseWriter, r *http.Request) {
+//LogURL shows your url use log.Println.
+func LogURL(w http.ResponseWriter, r *http.Request) {
 	log.Println(r.URL)
 }
 
@@ -53,9 +57,9 @@ func main() {
 	server := http.Server{
 		Addr: "127.0.0.1:8080",
 	}
-	http.HandleFunc("/student/", get_handler)
+	http.HandleFunc("/student/", LogURL)
 	id := 1
-	student, err := get_a_student(id)
+	student, err := getAStudent(id)
 	if err != nil {
 		panic(err)
 	}
@@ -65,4 +69,5 @@ func main() {
 		return
 	}
 	fmt.Println(output)
+	server.ListenAndServe()
 }
