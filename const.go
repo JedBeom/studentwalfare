@@ -1,4 +1,4 @@
-package data
+package main
 
 // Username makes you change username easiler
 func Username() string {

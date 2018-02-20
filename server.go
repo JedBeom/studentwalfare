@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/JedBeom/studentwelfare/data"
 	_ "github.com/lib/pq"
 )
 
@@ -38,7 +37,7 @@ var Db *sql.DB
 
 func init() {
 	var err error
-	Db, err = sql.Open("postgres", "user="+data.Username()+" dbname=students password="+data.Password()+" sslmode=disable")
+	Db, err = sql.Open("postgres", "user="+Username()+" dbname=students password="+Password()+" sslmode=disable")
 	// You should go to data/const.go and replace yourusername and yourpassword.
 	if err != nil {
 		panic(err)
