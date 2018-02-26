@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ID로 학생 검색하기</title>
+    <meta charset="utf-8">
+</head>
+<body>
+    <h1>ID로 학생 검색하기</h1>
+    <form method="GET">
+        <input type="text" name="id" title="ID로 학생 검색하기">
+        <input type="submit" value="검색">
+    </form>
+    <table>
+        {{ if .ErrorMessage }}
+        <div>{{ .ErrorMessage }}</div>
+        {{ else }}
+        {{ end }}
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Number</th>
+                <th>Name</th>
+                <th>Points</th>
+                <th>IsAdmin</th>
+                <th>Email</th>
+                <th>HasPassword</th>
+                <th>Coupons</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>{{ .ID }}</th>
+                <th>{{ .Number }}</th>
+                <th>{{ .Name }}</th>
+                <th>{{ .Points }}</th>
+                <th>{{ if .Password }}
+                    True
+                    {{ else }}
+                    False
+                    {{ end }}
+                </th>
+                <th>
+                    {{ if .Email }}
+                    {{ .Email }}
+                    {{ else }}
+                    존재하지 않음
+                    {{ end }}
+                </th>
+                <th>{{ .IsAdmin }}</th>
+                <th>{{ .Coupons }}</th>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
